@@ -2,10 +2,10 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+url: http://wufulin.github.io
+title: Franklin爱家 
+subtitle: 光与影的徘徊者，等待再等待...
+author: Franklin
 simple_search: http://google.com/search
 description:
 
@@ -69,8 +69,8 @@ github_show_profile_link: true
 github_skip_forks: true
 
 # Twitter
-twitter_user:
-twitter_tweet_button: true
+# twitter_user:
+# twitter_tweet_button: true
 
 # Google +1
 google_plus_one: false
