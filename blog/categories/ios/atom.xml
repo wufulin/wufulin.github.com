@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iOS | Franklin爱家]]></title>
+  <link href="http://wufulin.github.io/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://wufulin.github.io/"/>
+  <updated>2013-08-14T14:37:22+08:00</updated>
+  <id>http://wufulin.github.io/</id>
+  <author>
+    <name><![CDATA[Franklin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS即时通讯IM开发研究（上）]]></title>
+    <link href="http://wufulin.github.io/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-%28shang-%29/"/>
+    <updated>2013-08-14T14:08:00+08:00</updated>
+    <id>http://wufulin.github.io/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-(shang-)</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>
