@@ -7,7 +7,7 @@ title: Franklin爱家
 subtitle: 光与影的徘徊者，等待再等待...
 author: Franklin
 simple_search: http://google.com/search
-description:
+description: 关注GIS、iOS、摄影、艺术
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -98,3 +98,6 @@ google_analytics_tracking_id:
 
 # Facebook Like
 facebook_like: false
+
+# Weibo share
+weibo_share: true
