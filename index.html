@@ -9,7 +9,7 @@
 	<meta name="author" content="Franklin">
 
 	
-	<meta name="description" content="Aug 14th, 2013 iOS iOS即时通讯IM开发研究（上） Aug 14th, 2013 其它 2013下半年目标 1. 积极参与POCO的线下摄影活动，提高摄影水平 2. 勤写Blog，分享生活与工作，虽然不能保证有高质量的Blog，但起码要养成习惯 3. &hellip;">
+	<meta name="description" content="Aug 14th, 2013 iOS iOS即时通讯IM开发研究（上） 最近由于要开发类似微信的App，所以专门研究IM如何通讯 XMPP协议 XMPP特点是将复杂性从客户端转移到服务器端，它定义了三个角色：XMPP客户端、XMPP服务器、网 关，具有跨平台、开发、标准、安全和可扩展 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,10 +34,12 @@
 		<div class="left-col">
 			<div class="intrude-less">
 			<header id="header" class="inner"><div class="profilepic">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
 	<script src="/javascripts/md5.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("wufulinit@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
 		});
 	</script>
 </div>
@@ -63,8 +65,13 @@
 <nav id="sub-nav">
 	<div class="social">
 		
+		<a class="weibo" href="http://www.weibo.com/1586297785" title="Weibo">Weibo</a>
 		
 		
+		
+		
+		
+		<a class="github" href="https://github.com/wufulin" title="GitHub">GitHub</a>
 		
 		
 		
@@ -115,7 +122,17 @@
 	</div>
 	<h1 class="title" itemprop="name"><a href="/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-%28shang-%29/" itemprop="url">iOS即时通讯IM开发研究（上）</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		
+		<p>最近由于要开发类似微信的App，所以专门研究IM如何通讯</p>
+
+<p>XMPP协议</p>
+
+<p>XMPP特点是将复杂性从客户端转移到服务器端，它定义了三个角色：XMPP客户端、XMPP服务器、网 关，具有跨平台、开发、标准、安全和可扩展</p>
+
+<p>XMPP客户端：通过TCP套连接字与XMPP服务器进行通信</p>
+
+<p>XMPP服务器：同时承担了客户端信息记录、连接管理和信息路由功能</p>
+
+<p>网关：承担着与异构即时通信系统的互联</p>
 
 		
 		
@@ -228,8 +245,6 @@
 
 Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
 			<script src="/javascripts/slash.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-
 <script src="/javascripts/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 (function($){
@@ -251,6 +266,7 @@ Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Sha
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+
 
 
 
