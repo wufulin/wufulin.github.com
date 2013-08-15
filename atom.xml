@@ -4,7 +4,7 @@
   <title><![CDATA[Franklin爱家]]></title>
   <link href="http://wufulin.github.io/atom.xml" rel="self"/>
   <link href="http://wufulin.github.io/"/>
-  <updated>2013-08-15T14:07:11+08:00</updated>
+  <updated>2013-08-15T16:06:15+08:00</updated>
   <id>http://wufulin.github.io/</id>
   <author>
     <name><![CDATA[Franklin]]></name>
@@ -18,17 +18,7 @@
     <link href="http://wufulin.github.io/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-%28shang-%29/"/>
     <updated>2013-08-14T14:08:00+08:00</updated>
     <id>http://wufulin.github.io/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-(shang-)</id>
-    <content type="html"><![CDATA[<p>最近由于要开发类似微信的App，所以专门研究IM如何通讯</p>
-
-<p>XMPP协议</p>
-
-<p>XMPP特点是将复杂性从客户端转移到服务器端，它定义了三个角色：XMPP客户端、XMPP服务器、网 关，具有跨平台、开发、标准、安全和可扩展</p>
-
-<p>XMPP客户端：通过TCP套连接字与XMPP服务器进行通信</p>
-
-<p>XMPP服务器：同时承担了客户端信息记录、连接管理和信息路由功能</p>
-
-<p>网关：承担着与异构即时通信系统的互联</p>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
