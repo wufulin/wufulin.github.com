@@ -4,7 +4,7 @@
   <title><![CDATA[Franklin爱家]]></title>
   <link href="http://wufulin.github.io/atom.xml" rel="self"/>
   <link href="http://wufulin.github.io/"/>
-  <updated>2013-08-28T10:43:44+08:00</updated>
+  <updated>2013-09-17T14:35:08+08:00</updated>
   <id>http://wufulin.github.io/</id>
   <author>
     <name><![CDATA[Franklin]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[值得深入学习的iOS 开源App]]></title>
+    <link href="http://wufulin.github.io/blog/2013/09/17/zhi-de-shen-ru-xue-xi-de-ios-kai-yuan-app/"/>
+    <updated>2013-09-17T14:10:00+08:00</updated>
+    <id>http://wufulin.github.io/blog/2013/09/17/zhi-de-shen-ru-xue-xi-de-ios-kai-yuan-app</id>
+    <content type="html"><![CDATA[<h3>应用篇</h3>
+
+<hr />
+
+<ul>
+<li><a href="https://github.com/yanghua/iBus.git"><em>iBus</em></a> 交通查询类应用</li>
+<li><a href="https://github.com/zhiyu/epub.git"><em>epub</em></a> 电子书阅读应用</li>
+<li><a href="https://github.com/zhijie/redmine-mobile.git"><em>redmine-mobile</em></a> redmine客户端</li>
+<li><a href="https://github.com/Ink/ThatInbox"><em>ThatInbox</em></a> 邮箱类应用</li>
+<li><a href="https://github.com/mmackh/Hacker-News-for-iOS.git"><em>Hacker-News</em></a> 阅读类应用</li>
+<li><a href="https://github.com/gaosboy/iOSSF.git"><em>SegmentFault</em></a> SegmentFault网站客户端</li>
+<li><a href="https://github.com/kesalin/AmericanEnglish"><em>AmericanEnglish</em></a> 美式英语App</li>
+<li><a href="https://github.com/TonnyTao/DoubanAlbum"><em>豆瓣相册</em></a></li>
+</ul>
+
+
+<h3>游戏篇</h3>
+
+<hr />
+
+<ul>
+<li><a href="https://github.com/hxy060799/PlaneWar"><em>使用Cocos2d仿制的微信飞机大战</em></a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[值得收藏的iOS第三方开源库]]></title>
+    <link href="http://wufulin.github.io/blog/2013/09/17/zhi-de-shou-cang-de-iosdi-san-fang-kai-yuan-ku/"/>
+    <updated>2013-09-17T11:29:00+08:00</updated>
+    <id>http://wufulin.github.io/blog/2013/09/17/zhi-de-shou-cang-de-iosdi-san-fang-kai-yuan-ku</id>
+    <content type="html"><![CDATA[<h3>1. Popover视图</h3>
+
+<ul>
+<li><a href="https://github.com/nicolaschengdev/WYPopoverController"><em>WYPopoverController</em></a></li>
+<li><a href="https://github.com/werner77/WEPopover"><strong>WEPopover@krzd</strong></a></li>
+</ul>
+
+
+<h3>2. ImageView</h3>
+
+<ul>
+<li><a href="https://github.com/xmartlabs/XLRemoteImageView"><em>XLRemoteImageView</em></a></li>
+<li><a href="https://github.com/rs/SDWebImage"><strong>SDWebImage</strong></a></li>
+</ul>
+
+
+<h3>3. PhotoBrowser</h3>
+
+<ul>
+<li><a href="https://github.com/appkraft/IDMPhotoBrowser"><em>IDMPhotoBrowser</em></a></li>
+</ul>
+
+
+<h3>4. 网络</h3>
+
+<ul>
+<li><a href="https://github.com/AFNetworking/AFNetworking"><em>AFNetWorking</em></a></li>
+<li><a href="https://github.com/pokeb/asi-http-request"><strong>ASIHttpRequest</strong></a></li>
+</ul>
+
+
+<h3>5. Navigation视图</h3>
+
+<ul>
+<li><a href="https://github.com/michaelhenry/FlipBoardNavigationController"><em>FlipBoardNavigationController</em></a></li>
+</ul>
+
+
+<h3>6. Segmented视图</h3>
+
+<ul>
+<li><a href="https://github.com/pepibumur/PPiFlatSegmentedControl"><em>PPiFlatSegmentedControl</em></a></li>
+</ul>
+
+
+<h3>7. Button视图</h3>
+
+<ul>
+<li><a href="https://github.com/pepibumur/PPiAwesomeButton"><em>PPiAwesomeButton</em></a></li>
+</ul>
+
+
+<h3>8. App 评分视图</h3>
+
+<ul>
+<li><a href="https://github.com/UrbanApps/UAAppReviewManager"><em>UAAppReviewManager</em></a></li>
+</ul>
+
+
+<h3>9. Xcode Plugins</h3>
+
+<ul>
+<li><a href="https://github.com/ricobeck/KFCocoaPodsPlugin"><em>KFCocoaPodsPlugin</em></a> Xcode 5版本以上</li>
+<li><a href="http://mneorr.github.io/Alcatraz/"><strong>Alcatraz</strong></a> 非常有用，500%推荐</li>
+</ul>
+
+
+<h3>10. 左右抽屉视图</h3>
+
+<ul>
+<li><a href="https://github.com/gotosleep/JASidePanels"><em>JASidePanels</em></a></li>
+<li><a href="https://github.com/Inferis/ViewDeck"><strong>ViewDeck</strong></a></li>
+</ul>
+
+
+<h3>11. TableView视图</h3>
+
+<ul>
+<li><a href="https://github.com/popochess/PPImageScrollingTableViewCell"><em>PPImageScrollingTableViewCell</em></a></li>
+<li><a href="https://github.com/steipete/PSTCollectionView"><strong>PSTCollectionView</strong></a> 非常棒</li>
+</ul>
+
+
+<h3>12. ScrollView视图</h3>
+
+<ul>
+<li><a href="https://github.com/monsieurje/ICViewPager.git"><strong>ICViewPager</strong></a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS即时通讯IM开发研究（上）]]></title>

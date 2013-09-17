@@ -2,36 +2,48 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://wufulin.github.io/blog/2013/08/13/pocoba-yue-feng-qing/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/blog/2013/08/14/2013xia-ban-nian-mu-biao/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://wufulin.github.io/blog/2013/08/14/iosji-shi-tong-xun-imkai-fa-yan-jiu-%28shang-%29/
         </loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://wufulin.github.io/blog/2013/09/17/zhi-de-shou-cang-de-iosdi-san-fang-kai-yuan-ku/
+        </loc>
+        <lastmod>2013-09-17T14:21:59+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://wufulin.github.io/blog/2013/09/17/zhi-de-shen-ru-xue-xi-de-ios-kai-yuan-app/
+        </loc>
+        <lastmod>2013-09-17T14:32:41+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/about/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/blog/archives/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T14:32:41+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/blog/categories/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T14:32:41+08:00</lastmod>
     </url>
     <url>
         <loc>http://wufulin.github.io/robots.txt</loc>
-        <lastmod>2013-08-28T10:43:28+08:00</lastmod>
+        <lastmod>2013-09-17T11:29:17+08:00</lastmod>
     </url>
 </urlset>
