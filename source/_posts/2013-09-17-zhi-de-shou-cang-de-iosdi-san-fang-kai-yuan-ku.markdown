@@ -46,7 +46,11 @@ categories: iOS
 * [**PSTCollectionView**](https://github.com/steipete/PSTCollectionView) 非常棒
 
 ### 12. ScrollView视图
-* [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git )
+* [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git)
+
+### 13. UISwitch
+* [**SevenSwitch**](https://github.com/bvogelzang/SevenSwitch) iOS 7风格的UISwitch，兼容iOS 5.0以上
+
 
 
 
