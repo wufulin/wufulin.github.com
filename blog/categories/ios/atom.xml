@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | Franklin爱家]]></title>
   <link href="http://wufulin.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://wufulin.github.io/"/>
-  <updated>2013-09-17T14:35:08+08:00</updated>
+  <updated>2013-09-23T19:33:31+08:00</updated>
   <id>http://wufulin.github.io/</id>
   <author>
     <name><![CDATA[Franklin]]></name>
@@ -137,6 +137,13 @@
 
 <ul>
 <li><a href="https://github.com/monsieurje/ICViewPager.git"><strong>ICViewPager</strong></a></li>
+</ul>
+
+
+<h3>13. UISwitch</h3>
+
+<ul>
+<li><a href="https://github.com/bvogelzang/SevenSwitch"><strong>SevenSwitch</strong></a> iOS 7风格的UISwitch，兼容iOS 5.0以上</li>
 </ul>
 
 ]]></content>
