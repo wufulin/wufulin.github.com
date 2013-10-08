@@ -52,6 +52,7 @@ categories: iOS
 * [_SDNestedTable_](https://github.com/serverdensity/ios-SDNestedTable.git) 折叠式表格
 * [**EGOTableViewPullRefresh**](https://github.com/enormego/EGOTableViewPullRefresh.git) 下拉刷新
 * [**LoadMoreTableFooterView**](https://github.com/sishen/LoadMoreTableFooterView.git) 上拉刷新
+* [_MCSwipeTableViewCell_](https://github.com/alikaragoz/MCSwipeTableViewCell.git) 实现了类似Mailbox iOS app的gestural table view cell style
 
 ### 12. ScrollView视图
 * [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git )
