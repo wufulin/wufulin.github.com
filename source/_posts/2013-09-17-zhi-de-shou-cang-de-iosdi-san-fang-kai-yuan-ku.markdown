@@ -13,6 +13,7 @@ categories: iOS
 ### 2. ImageView
 * [_XLRemoteImageView_](https://github.com/xmartlabs/XLRemoteImageView)
 * [**SDWebImage**](https://github.com/rs/SDWebImage)
+* [_CurledViews_](https://github.com/remotevision/CurledViews.git) UIImageView  looks like a bordered photo 
 
 ### 3. PhotoBrowser
 * [_IDMPhotoBrowser_](https://github.com/appkraft/IDMPhotoBrowser)
@@ -23,6 +24,7 @@ categories: iOS
 
 ### 5. Navigation视图
 * [_FlipBoardNavigationController_](https://github.com/michaelhenry/FlipBoardNavigationController)
+* [_REMenu_](https://github.com/romaonthego/REMenu.git) 导航栏菜单
 
 ### 6. Segmented视图
 * [_PPiFlatSegmentedControl_](https://github.com/pepibumur/PPiFlatSegmentedControl)
@@ -32,6 +34,7 @@ categories: iOS
 
 ### 8. App 评分视图
 * [_UAAppReviewManager_](https://github.com/UrbanApps/UAAppReviewManager)
+* [_iVersion_](https://github.com/nicklockwood/iVersion.git)
 
 ### 9. Xcode Plugins
 * [_KFCocoaPodsPlugin_](https://github.com/ricobeck/KFCocoaPodsPlugin) Xcode 5版本以上
@@ -40,17 +43,37 @@ categories: iOS
 ### 10. 左右抽屉视图
 * [_JASidePanels_](https://github.com/gotosleep/JASidePanels)
 * [**ViewDeck**](https://github.com/Inferis/ViewDeck)
+* [_MMDrawerController_](https://github.com/mutualmobile/MMDrawerController.git)
 
 ### 11. TableView视图
 * [_PPImageScrollingTableViewCell_](https://github.com/popochess/PPImageScrollingTableViewCell)
 * [**PSTCollectionView**](https://github.com/steipete/PSTCollectionView) 非常棒
+* [_JTGestureBasedTableView_](https://github.com/jamztang/JTGestureBasedTableViewDemo.git) 仿 Clear 应用的列表功能
+* [_SDNestedTable_](https://github.com/serverdensity/ios-SDNestedTable.git) 折叠式表格
+* [**EGOTableViewPullRefresh**](https://github.com/enormego/EGOTableViewPullRefresh.git) 下拉刷新
+* [**LoadMoreTableFooterView**](https://github.com/sishen/LoadMoreTableFooterView.git) 上拉刷新
 
 ### 12. ScrollView视图
-* [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git)
+* [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git )
 
-### 13. UISwitch
-* [**SevenSwitch**](https://github.com/bvogelzang/SevenSwitch) iOS 7风格的UISwitch，兼容iOS 5.0以上
+### 13. WebViewController视图
+* [**SVWebViewController**](https://github.com/samvermette/SVWebViewController.git)
 
+### 14. Other 视图
+* [_KLNoteViewController_](https://github.com/KieranLafferty/KLNoteViewController.git) 类似 Evernote 5.0 app 的界面
+* [_KYCircleMenu_](https://github.com/Kjuly/KYCircleMenu.git) 类似 iPokeMon 的菜单
+* [_EMag_](https://github.com/zhiyu/emag.git) 类似 flipboard-like app
+* [_FlatUIKit_](https://github.com/Grouper/FlatUIKit.git) 模拟扁平化风格
+
+### 15. Share分享
+* [_ShareKit_](https://github.com/ShareKit/ShareKit.git)
+
+### 16. 加密解密、解析HTML
+* [_Base64_](https://github.com/nicklockwood/Base64.git)
+* [**DTCoreText**](https://github.com/Cocoanetics/DTCoreText.git)
+
+### 17. 数据库SQLite
+* [_FMDB_](https://github.com/ccgus/fmdb.git)
 
 
 

@@ -16,6 +16,9 @@ categories: iOS
 * [_SegmentFault_](https://github.com/gaosboy/iOSSF.git) SegmentFault网站客户端
 * [_AmericanEnglish_](https://github.com/kesalin/AmericanEnglish) 美式英语App
 * [_豆瓣相册_](https://github.com/TonnyTao/DoubanAlbum)
+* [_NewsReader_](https://github.com/cubewang/NewsReader.git)
+* [_White House_](https://github.com/WhiteHouse/wh-app-ios.git)
+* [_XWQiuShiBaike_](https://github.com/xwren362922604/XWQiuShiBaiKe.git) 内涵糗事 iPhone客户端项目
 
 ### 游戏篇
 ---
