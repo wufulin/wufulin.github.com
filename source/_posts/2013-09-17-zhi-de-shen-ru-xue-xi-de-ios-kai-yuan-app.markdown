@@ -19,6 +19,7 @@ categories: iOS
 * [_NewsReader_](https://github.com/cubewang/NewsReader.git)
 * [_White House_](https://github.com/WhiteHouse/wh-app-ios.git)
 * [_XWQiuShiBaike_](https://github.com/xwren362922604/XWQiuShiBaiKe.git) 内涵糗事 iPhone客户端项目
+* [_HappyEnglish_](https://github.com/imtiger/HappyEnglish.git) 美剧英语每日一句
 
 ### 游戏篇
 ---
