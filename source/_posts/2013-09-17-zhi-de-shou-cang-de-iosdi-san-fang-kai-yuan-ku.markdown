@@ -39,6 +39,7 @@ categories: iOS
 ### 9. Xcode Plugins
 * [_KFCocoaPodsPlugin_](https://github.com/ricobeck/KFCocoaPodsPlugin) Xcode 5版本以上
 * [**Alcatraz**](http://mneorr.github.io/Alcatraz/) 非常有用，500%推荐
+* [_FuzzyAutocompletePlugin_](https://github.com/chendo/FuzzyAutocompletePlugin) 代码自动补全功能，赞，大力推荐
 
 ### 10. 左右抽屉视图
 * [_JASidePanels_](https://github.com/gotosleep/JASidePanels)
