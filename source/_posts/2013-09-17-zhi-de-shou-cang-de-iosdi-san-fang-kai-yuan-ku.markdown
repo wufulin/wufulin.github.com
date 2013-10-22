@@ -66,6 +66,7 @@ categories: iOS
 * [_KYCircleMenu_](https://github.com/Kjuly/KYCircleMenu.git) 类似 iPokeMon 的菜单
 * [_EMag_](https://github.com/zhiyu/emag.git) 类似 flipboard-like app
 * [_FlatUIKit_](https://github.com/Grouper/FlatUIKit.git) 模拟扁平化风格
+* [_Nimbus_](https://github.com/jverkoey/nimbus.git) 
 
 ### 15. Share分享
 * [_ShareKit_](https://github.com/ShareKit/ShareKit.git)
