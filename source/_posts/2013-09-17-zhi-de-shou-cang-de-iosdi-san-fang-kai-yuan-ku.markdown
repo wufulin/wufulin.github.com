@@ -25,6 +25,7 @@ categories: iOS
 ### 5. Navigation视图
 * [_FlipBoardNavigationController_](https://github.com/michaelhenry/FlipBoardNavigationController)
 * [_REMenu_](https://github.com/romaonthego/REMenu.git) 导航栏菜单
+* [_SGNavigationProgress_](https://github.com/sgryschuk/SGNavigationProgress)
 
 ### 6. Segmented视图
 * [_PPiFlatSegmentedControl_](https://github.com/pepibumur/PPiFlatSegmentedControl)
@@ -54,6 +55,7 @@ categories: iOS
 * [**EGOTableViewPullRefresh**](https://github.com/enormego/EGOTableViewPullRefresh.git) 下拉刷新
 * [**LoadMoreTableFooterView**](https://github.com/sishen/LoadMoreTableFooterView.git) 上拉刷新
 * [_MCSwipeTableViewCell_](https://github.com/alikaragoz/MCSwipeTableViewCell.git) 实现了类似Mailbox iOS app的gestural table view cell style
+* [_SWTableViewCell_](https://github.com/CEWendel/SWTableViewCell)
 
 ### 12. ScrollView视图
 * [**ICViewPager**](https://github.com/monsieurje/ICViewPager.git )
