@@ -29,7 +29,9 @@ jobs:
           npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          npx hexo clean
+          npx hexo generate
         env:
           NODE_ENV: production
 
