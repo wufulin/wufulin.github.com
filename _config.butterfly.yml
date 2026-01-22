@@ -1,0 +1,206 @@
+# Butterfly Theme Configuration
+# Docs: https://butterfly.js.org/
+
+# Navigation
+nav:
+  logo:
+  display_title: true
+  display_post_title: true
+  fixed: false
+
+menu:
+  首页: / || fas fa-home
+  文章: /archives/ || fas fa-archive
+  分类: /categories/ || fas fa-folder-open
+  标签: /tags/ || fas fa-tags
+  时间线: /timeline/ || fas fa-clock
+  友情链接: /links/ || fas fa-link
+  关于: /about/ || fas fa-heart
+
+# Code Blocks
+code_blocks:
+  theme: light
+  macStyle: true  # MacOS 风格
+  height_limit: false
+  word_wrap: false
+  copy: true
+  language: true
+  shrink: false
+  fullpage: false
+
+# Social
+social:
+  fab fa-github: https://github.com/wufulin || Github || '#24292e'
+
+# Images
+favicon: /img/favicon.png
+avatar:
+  img: /img/avatar.png
+  effect: false
+
+disable_top_img: false
+default_top_img:
+
+# Cover
+cover:
+  index_enable: true
+  default_cover:
+    - /img/default_cover.jpg
+
+# Highlight Theme
+highlight_theme: mac  # MacOS 风格代码高亮
+
+# Meta
+index_top_img_height: true
+index_site_info: true
+
+# Footer
+footer:
+  owner:
+    enable: true
+    since: 2025
+  custom_text:
+
+# Search
+local_search:
+  enable: true
+  preload: true
+
+# Mermaid
+mermaid:
+  enable: true
+  theme: default
+
+# Timeline
+timeline:
+  enable: true
+
+# Comments
+comments:
+  use: Twikoo
+  text: true
+  lazyload: true
+  count: true
+  card_post_count: true
+
+twikoo:
+  envId: ''  # 需要后续配置腾讯云开发环境 ID
+  region:
+  option:
+
+# Post Meta
+post_meta:
+  page:
+    date_type: both
+    categories: true
+    tags: true
+  post:
+    date_type: both
+    categories: true
+    tags: true
+
+# Word Count
+wordcount:
+  enable: true
+  post_wordcount: true
+  min2read: true
+
+# TOC
+toc:
+  post: true
+  page: false
+  number: true
+  expand: false
+  style_simple: false
+
+# Related Post
+related_post:
+  enable: true
+  limit: 6
+  date_type: created
+
+# Copyright
+post_copyright:
+  enable: true
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+# Admonition
+note:
+  enable: true
+  style: simple
+  icons: true
+
+# Carousel
+carousel:
+  speed: 800
+
+# Tags Settings
+tag:
+  enable: true
+  headline: true
+  limit: 40
+
+# Categories Settings
+category:
+  enable: true
+  headline: true
+  limit: 40
+
+# Archive Settings
+archive:
+  enable: true
+  headline: true
+  type: 'monthly'
+
+# Sidebar Widgets
+aside:
+  enable: true
+  hide: false
+  button: true
+  mobile: true
+  position: right
+  display:
+    - breadcrumb
+    - archive
+    - category
+    - tag
+    - recent_post
+  widgets:
+    - card_recent_post
+    - card_categories
+    - card_tags
+    - card_archives
+    - card_webinfo
+  recent_post:
+    enable: true
+    limit: 5
+    sort: updated
+    sort_order: false
+  categories:
+    enable: true
+    limit: 10
+  tags:
+    enable: true
+    limit: 20
+    color: true
+  archives:
+    enable: true
+    type: 'monthly'
+    order: -1
+  card_webinfo:
+    enable: true
+    post_count: true
+    last_push_date: true
+
+# CDN
+CDN:
+  css:
+    - /css/index.css
+  js:
+    - /js/main.js
+
+# Inject
+inject:
+  head:
+  bottom:
