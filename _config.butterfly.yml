@@ -52,7 +52,6 @@ highlight_theme: mac  # MacOS 风格代码高亮
 
 # Meta
 index_top_img_height: 400px
-index_site_info: true
 
 # Footer
 footer:
