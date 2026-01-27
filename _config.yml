@@ -87,5 +87,5 @@ theme: butterfly
 # Deployment
 deploy:
   type: git
-  repo: https://github.com/wufulin/wufulin.github.com.git
+  repo: git@github.com:wufulin/wufulin.github.com.git
   branch: gh-pages
