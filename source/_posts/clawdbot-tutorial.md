@@ -40,7 +40,7 @@ tags:
 
 ClawdBot 不是一个 AI 模型,而是一个"**AI 网关**"——它负责连接你的聊天软件和 AI 大模型 API,让 AI 能力无缝融入日常沟通工具。
 
-![ClawdBot架构](https://help.apiyi.com/wp-content/uploads/2026/01/clawdbot-beginner-guide-personal-ai-assistant-2026-image-1.png)
+![ClawdBot架构](https://wufulin.github.io/img/clawdbot-beginner-guide-personal-ai-assistant-2026-image-1.png)
 
 _图:ClawdBot 三层架构设计_
 
@@ -546,25 +546,25 @@ ClawdBot 的出现标志着 AI 从"聊天机器人"向"智能体"的演进:
 
 ## 附录:架构示意图
 
-```mermaid
+{% mermaid %}
 graph TD
-    A[用户] --> B[聊天软件]
-    B --> C[ClawdBot Gateway]
-    C --> D[Channels层]
-    D --> D1[Discord]
-    D --> D2[Telegram]
-    D --> D3[WhatsApp]
-    C --> E[Memory层]
-    E --> E1[对话历史]
-    E --> E2[知识库]
-    C --> F[Skills层]
-    F --> F1[网页搜索]
-    F --> F2[文件操作]
-    F --> F3[自定义插件]
-    C --> G[LLM层]
-    G --> G1[Claude API]
-    G --> G2[GPT API]
-    G --> G3[本地模型]
-```
+A[用户] --> B[聊天软件]
+B --> C[ClawdBot Gateway]
+C --> D[Channels层]
+D --> D1[Discord]
+D --> D2[Telegram]
+D --> D3[WhatsApp]
+C --> E[Memory层]
+E --> E1[对话历史]
+E --> E2[知识库]
+C --> F[Skills层]
+F --> F1[网页搜索]
+F --> F2[文件操作]
+F --> F3[自定义插件]
+C --> G[LLM层]
+G --> G1[Claude API]
+G --> G2[GPT API]
+G --> G3[本地模型]
+{% endmermaid %}
 
 _图:ClawdBot 完整架构图_
