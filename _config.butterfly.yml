@@ -20,7 +20,7 @@ menu:
 # Code Blocks
 code_blocks:
   theme: light
-  macStyle: true  # MacOS 风格
+  macStyle: true # MacOS 风格
   height_limit: false
   word_wrap: false
   copy: true
@@ -39,21 +39,33 @@ avatar:
   effect: false
 
 disable_top_img: false
-default_top_img:
+default_top_img: /img/top_banner.png
 
 # Cover
 cover:
   index_enable: true
   default_cover:
-    - /img/default_cover.jpg
+    - /img/default_cover1.png
+    - /img/default_cover2.png
+    - /img/default_cover3.png
+    - /img/default_cover4.png
+    - /img/default_cover5.png
+    - /img/default_cover6.png
+    - /img/default_cover7.png
+    - /img/default_cover8.png
+    - /img/default_cover9.png
 
 # Highlight Theme
-highlight_theme: mac  # MacOS 风格代码高亮
+highlight_theme: mac # MacOS 风格代码高亮
 
 # Meta
-index_top_img_height: 400px
+index_top_img_height: 700px
+
+# Background
+background: "#F4EFEB"
 
 # Footer
+footer_img: /img/footer_bg.png
 footer:
   owner:
     enable: true
@@ -83,7 +95,7 @@ comments:
   card_post_count: true
 
 twikoo:
-  envId: ''  # 需要后续配置腾讯云开发环境 ID
+  envId: "" # 需要后续配置腾讯云开发环境 ID
   region:
   option:
 
@@ -150,7 +162,7 @@ category:
 archive:
   enable: true
   headline: true
-  type: 'monthly'
+  type: "monthly"
 
 # Sidebar Widgets
 aside:
@@ -185,7 +197,7 @@ aside:
     color: true
   archives:
     enable: true
-    type: 'monthly'
+    type: "monthly"
     order: -1
   card_webinfo:
     enable: true
