@@ -11,15 +11,6 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/tags/index.html</loc>
-    
-    <lastmod>2026-01-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://wufulin.github.io/timeline/index.html</loc>
     
     <lastmod>2026-01-29</lastmod>
@@ -29,7 +20,25 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/2026/01/27/clawdbot-tutorial/</loc>
+    <loc>https://wufulin.github.io/tags/index.html</loc>
+    
+    <lastmod>2026-01-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/2026/01/29/claude-code-complete-guide/</loc>
+    
+    <lastmod>2026-01-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/2026/01/27/moltbot-tutorial/</loc>
     
     <lastmod>2026-01-29</lastmod>
     
@@ -48,15 +57,6 @@
   
   <url>
     <loc>https://wufulin.github.io/categories/index.html</loc>
-    
-    <lastmod>2026-01-29</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://wufulin.github.io/2026/01/29/claude-code-complete-guide/</loc>
     
     <lastmod>2026-01-29</lastmod>
     
@@ -109,7 +109,7 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/tags/ClawdBot/</loc>
+    <loc>https://wufulin.github.io/tags/Moltbot/</loc>
     <lastmod>2026-01-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
