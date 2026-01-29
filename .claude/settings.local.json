@@ -9,7 +9,11 @@
       "Bash(git add:*)",
       "Bash(hexo generate:*)",
       "Bash(npm ls:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(tree -L:*)",
+      "Bash(du:*)",
+      "Bash(npm run server)",
+      "Bash(npx hexo server:*)"
     ]
   }
 }
