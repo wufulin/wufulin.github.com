@@ -35,25 +35,25 @@ social:
 # Images
 favicon: /img/favicon.png
 avatar:
-  img: /img/avatar.png
+  img: /img/avatar.jpg
   effect: false
 
 disable_top_img: false
-default_top_img: /img/top_banner.png
+default_top_img: /img/top_banner.jpg
 
 # Cover
 cover:
   index_enable: true
   default_cover:
-    - /img/default_cover1.png
-    - /img/default_cover2.png
-    - /img/default_cover3.png
-    - /img/default_cover4.png
-    - /img/default_cover5.png
-    - /img/default_cover6.png
-    - /img/default_cover7.png
-    - /img/default_cover8.png
-    - /img/default_cover9.png
+    - /img/default_cover1.jpg
+    - /img/default_cover2.jpg
+    - /img/default_cover3.jpg
+    - /img/default_cover4.jpg
+    - /img/default_cover5.jpg
+    - /img/default_cover6.jpg
+    - /img/default_cover7.jpg
+    - /img/default_cover8.jpg
+    - /img/default_cover9.jpg
 
 # Highlight Theme
 highlight_theme: mac # MacOS 风格代码高亮
@@ -65,7 +65,7 @@ index_top_img_height: 700px
 background: "#F4EFEB"
 
 # Footer
-footer_img: /img/footer_bg.png
+footer_img: /img/footer_bg.jpg
 footer:
   owner:
     enable: true
