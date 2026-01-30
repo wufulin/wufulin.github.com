@@ -61,14 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const { highlightCopy, highlightLang, highlightHeightLimit, highlightFullpage, highlightMacStyle, plugin } = highLight
     const isHighlightShrink = GLOBAL_CONFIG_SITE.isHighlightShrink
     const isShowTool = highlightCopy || highlightLang || isHighlightShrink !== undefined || highlightFullpage || highlightMacStyle
-    const isNotHighlightJs = plugin !== 'highlight.js'
-    const isPrismjs = plugin === 'prismjs'
-    const $figureHighlight = isNotHighlightJs
-      ? Array.from(document.querySelectorAll('code[class*="language-"]')).map(code => code.parentElement)
-      : document.querySelectorAll('figure.highlight')
+    const $figureHighlight = plugin === 'highlight.js' ? document.querySelectorAll('figure.highlight') : document.querySelectorAll('pre[class*="language-"]')
 
     if (!((isShowTool || highlightHeightLimit) && $figureHighlight.length)) return
 
+    const isPrismjs = plugin === 'prismjs'
     const highlightShrinkClass = isHighlightShrink === true ? 'closed' : ''
     const highlightShrinkEle = isHighlightShrink !== undefined ? '<i class="fas fa-angle-down expand"></i>' : ''
     const highlightCopyEle = highlightCopy ? '<i class="fas fa-paste copy-button"></i>' : ''
@@ -136,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const highlightCopyFn = (ele, clickEle) => {
       const $buttonParent = ele.parentNode
       $buttonParent.classList.add('copy-true')
-      const preCodeSelector = isNotHighlightJs ? 'pre code' : 'table .code pre'
+      const preCodeSelector = isPrismjs ? 'pre code' : 'table .code pre'
       const codeElement = $buttonParent.querySelector(preCodeSelector)
       if (!codeElement) return
       copy(codeElement.innerText, clickEle)
@@ -216,23 +213,20 @@ document.addEventListener('DOMContentLoaded', () => {
         fragment.appendChild(ele)
       }
 
-      isNotHighlightJs ? item.parentNode.insertBefore(fragment, item) : item.insertBefore(fragment, item.firstChild)
+      isPrismjs ? item.parentNode.insertBefore(fragment, item) : item.insertBefore(fragment, item.firstChild)
     }
 
     $figureHighlight.forEach(item => {
       let langName = ''
-      if (isNotHighlightJs) {
-        const newClassName = isPrismjs ? 'prismjs' : 'default'
-        btf.wrap(item, 'figure', { class: `highlight ${newClassName}` })
-      }
+      if (isPrismjs) btf.wrap(item, 'figure', { class: 'highlight' })
 
       if (!highlightLang) {
         createEle('', item)
         return
       }
 
-      if (isNotHighlightJs) {
-        langName = isPrismjs ? item.getAttribute('data-language') || 'Code' : item.querySelector('code').getAttribute('class').replace('language-', '')
+      if (isPrismjs) {
+        langName = item.getAttribute('data-language') || 'Code'
       } else {
         langName = item.getAttribute('class').split(' ')[1]
         if (langName === 'plain' || langName === undefined) langName = 'Code'
