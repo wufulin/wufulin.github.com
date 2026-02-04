@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>Skills的最正确用法：将整个Github变成你的超级技能库</title>
+      <link href="/2026/02/04/github-skills/"/>
+      <url>/2026/02/04/github-skills/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Skills的最正确用法：将整个Github变成你的超级技能库"><a href="#Skills的最正确用法：将整个Github变成你的超级技能库" class="headerlink" title="Skills的最正确用法：将整个Github变成你的超级技能库"></a>Skills的最正确用法：将整个Github变成你的超级技能库</h1><blockquote><p>作者：数字生命卡兹克<br>原文：<a href="https://mp.weixin.qq.com/s/JER462B3dVYlwVYl6rTmzw">https://mp.weixin.qq.com/s/JER462B3dVYlwVYl6rTmzw</a></p></blockquote><hr><h2 id="核心观点"><a href="#核心观点" class="headerlink" title="核心观点"></a>核心观点</h2><p><strong>重复造轮子是低效的</strong>。互联网三十年，开源世界的大神们已经为你铺好了前路。你能想象到的绝大多数需求，都有现成的开源解决方案。</p><p>Skills 的正确用法，是<strong>将 GitHub 上的优质开源项目打包成你自己的技能库</strong>，让 Agent 为你所用。</p><hr><h2 id="为什么用开源项目封装-Skill？"><a href="#为什么用开源项目封装-Skill？" class="headerlink" title="为什么用开源项目封装 Skill？"></a>为什么用开源项目封装 Skill？</h2><table><thead><tr><th>对比项</th><th>临时写代码</th><th>开源项目 Skill</th></tr></thead><tbody><tr><td>稳定性</td><td>❌ 未经验证</td><td>✅ 经无数人测试</td></tr><tr><td>成功率</td><td>❌ 容易出错</td><td>✅ 久经考验</td></tr><tr><td>效率</td><td>❌ 从头开发</td><td>✅ 即拿即用</td></tr><tr><td>维护成本</td><td>❌ 自己维护</td><td>✅ 社区维护</td></tr></tbody></table><p><strong>关键洞察</strong>：那些历史悠久的经典开源项目，不管是成功率、稳定性还是效率，都远超绝大多数临时写的代码。</p><hr><h2 id="实战案例"><a href="#实战案例" class="headerlink" title="实战案例"></a>实战案例</h2><h3 id="案例-1：视频下载-Skill"><a href="#案例-1：视频下载-Skill" class="headerlink" title="案例 1：视频下载 Skill"></a>案例 1：视频下载 Skill</h3><p><strong>需求</strong>：下载 YouTube、B站 等视频</p><p><strong>开源项目</strong>：<a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>（GitHub 143k ⭐）</p><p><strong>封装步骤</strong>：</p><ol><li><p><strong>搜索项目</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有没有那种去各种视频网站下载视频的 GitHub 开源项目？</span><br></pre></td></tr></table></figure><p>AI 会推荐 yt-dlp</p></li><li><p><strong>一键封装</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">帮我把 https://github.com/yt-dlp/yt-dlp 打包成一个 Skill，</span><br><span class="line">只要给出视频链接，就可以帮我下载视频。</span><br></pre></td></tr></table></figure></li><li><p><strong>首次运行优化</strong></p><ul><li>使用 GPT 5.2 Codex 处理首次运行问题</li><li>安装依赖、处理 Cookie 等</li></ul></li><li><p><strong>固化经验</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把这些经验都更新到 video-downloader Skill 里，下次就不用这么慢了。</span><br></pre></td></tr></table></figure></li></ol><p><strong>效果</strong>：首次运行几分钟，后续仅需十几秒。</p><hr><h3 id="案例-2：桌面应用打包-Skill"><a href="#案例-2：桌面应用打包-Skill" class="headerlink" title="案例 2：桌面应用打包 Skill"></a>案例 2：桌面应用打包 Skill</h3><p><strong>需求</strong>：将 Web 项目打包成桌面 APP</p><p><strong>开源项目</strong>：<a href="https://github.com/tw93/Pake">Pake</a>（GitHub 45k ⭐）</p><p><strong>用法</strong>：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用 Pake Skill 把我的网页打包成桌面应用</span><br></pre></td></tr></table></figure><hr><h3 id="案例-3：万能格式转换工厂"><a href="#案例-3：万能格式转换工厂" class="headerlink" title="案例 3：万能格式转换工厂"></a>案例 3：万能格式转换工厂</h3><p><strong>思路</strong>：将多个顶级格式转换项目封装在一起</p><p>可集成的工具：</p><ul><li>FFmpeg（音视频处理）</li><li>ImageMagick（图像处理）</li><li>Pandoc（文档转换）</li></ul><p><strong>效果</strong>：一个 Skill，解决所有格式转换需求。</p><hr><h3 id="案例-4：网页归档-Skill"><a href="#案例-4：网页归档-Skill" class="headerlink" title="案例 4：网页归档 Skill"></a>案例 4：网页归档 Skill</h3><p><strong>开源项目</strong>：<a href="https://github.com/ArchiveBox/ArchiveBox">ArchiveBox</a></p><p><strong>功能</strong>：想保存的网页，发送给 ArchiveBox Skill，以无数种格式保存。</p><hr><h3 id="案例-5：密码破译-Skill"><a href="#案例-5：密码破译-Skill" class="headerlink" title="案例 5：密码破译 Skill"></a>案例 5：密码破译 Skill</h3><p><strong>开源项目</strong>：<a href="https://github.com/Ciphey/Ciphey">Ciphey</a></p><p><strong>功能</strong>：配合本地 Agent，直接破译密码。</p><hr><h2 id="Skill-封装全流程"><a href="#Skill-封装全流程" class="headerlink" title="Skill 封装全流程"></a>Skill 封装全流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">需求 → AI搜索GitHub项目 → Skill化封装 → 首次运行 → 迭代优化 → 固化成型</span><br></pre></td></tr></table></figure><h3 id="推荐的模型搭配"><a href="#推荐的模型搭配" class="headerlink" title="推荐的模型搭配"></a>推荐的模型搭配</h3><table><thead><tr><th>阶段</th><th>推荐模型</th><th>原因</th></tr></thead><tbody><tr><td>搜索项目</td><td>GPT-5.2 Thinking</td><td>搜索能力强，幻觉低</td></tr><tr><td>构建 Skill</td><td>Claude 4.5 Opus</td><td>Coding 能力强</td></tr><tr><td>首次运行</td><td>GPT 5.2 Codex</td><td>解决运行时问题效率高</td></tr><tr><td>日常使用</td><td>任意</td><td>已稳定运行</td></tr></tbody></table><hr><h2 id="如何选择要封装的项目？"><a href="#如何选择要封装的项目？" class="headerlink" title="如何选择要封装的项目？"></a>如何选择要封装的项目？</h2><p><strong>三大原则</strong>：</p><ol><li><strong>高 Star 数</strong>：代表社区认可</li><li><strong>持续维护</strong>：最近有更新</li><li><strong>解决具体问题</strong>：功能单一且强大</li></ol><p><strong>推荐项目类型</strong>：</p><ul><li>视频&#x2F;音频处理（yt-dlp, FFmpeg）</li><li>图像处理（ImageMagick）</li><li>文档转换（Pandoc）</li><li>数据抓取（Scrapy）</li><li>自动化工具（Selenium, Playwright）</li></ul><hr><h2 id="背后的哲学"><a href="#背后的哲学" class="headerlink" title="背后的哲学"></a>背后的哲学</h2><blockquote><p>“你要相信，在这个世界上，有无数的大神和前人，已经为你铺好了前路。”</p><p>“你要相信，你的需求，永远不是这个世界上第一个提出的人。”</p><p>“你要相信，人类在这几十年所积攒的历史，几乎覆盖了世界所有的领域。”</p></blockquote><p><strong>开源精神</strong>：每一个愿意开源、无私分享知识的前辈，都让我们能站在他们的肩上，去摘更美的星辰。</p><hr><h2 id="你的弹药库可以有多大？"><a href="#你的弹药库可以有多大？" class="headerlink" title="你的弹药库可以有多大？"></a>你的弹药库可以有多大？</h2><p>GitHub 上 star 数量：</p><ul><li>🔥 yt-dlp：143k</li><li>🔥 FFmpeg： countless projects built on it</li><li>🔥 ImageMagick：行业标准</li><li>🔥 Pandoc：文档转换神器</li><li>🔥 ArchiveBox：网页归档</li><li>🔥 Ciphey：密码破译</li></ul><p>这些只是<strong>冰山一角</strong>。</p><hr><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote><p>“因为 Skills 的诞生，因为 Agent 的强大，现在每个人背后，都是全人类过去数十年的积累。”</p></blockquote><p>你无需三头六臂，无需头上长角，<strong>你的背后就是海量的知识和技能</strong>。</p><p>如果回到 3 年前的你面前，你觉得他跟你如今的能力边界，还有任何可比性吗？</p><p>朋友，这样璀璨、这样伟大、这样能让你成为超人的时代，真的不会让你兴奋吗？</p><hr><h2 id="参考项目"><a href="#参考项目" class="headerlink" title="参考项目"></a>参考项目</h2><table><thead><tr><th>项目</th><th>功能</th><th>Star 数</th></tr></thead><tbody><tr><td><a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a></td><td>视频下载</td><td>143k+</td></tr><tr><td><a href="https://github.com/tw93/Pake">Pake</a></td><td>网页转桌面应用</td><td>45k+</td></tr><tr><td><a href="https://github.com/ArchiveBox/ArchiveBox">ArchiveBox</a></td><td>网页归档</td><td>20k+</td></tr><tr><td><a href="https://github.com/Ciphey/Ciphey">Ciphey</a></td><td>自动化解密</td><td>15k+</td></tr></tbody></table><hr><p><em>本文整理自数字生命卡兹克的微信公众号文章，仅用于技术学习和分享。</em></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术分享 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> skills </tag>
+            
+            <tag> github </tag>
+            
+            <tag> open-source </tag>
+            
+            <tag> ai-agent </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>NanoClaw 代码深度分析</title>
       <link href="/2026/02/04/nanoclaw/"/>
       <url>/2026/02/04/nanoclaw/</url>

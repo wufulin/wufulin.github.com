@@ -1,0 +1,462 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Skills的最正确用法：将整个Github变成你的超级技能库 | Franklin爱家</title><meta name="author" content="Franklin"><meta name="copyright" content="Franklin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍如何利用AI将GitHub开源项目封装成Skill，打造个人超级技能库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Skills的最正确用法：将整个Github变成你的超级技能库">
+<meta property="og:url" content="https://wufulin.github.io/2026/02/04/github-skills/index.html">
+<meta property="og:site_name" content="Franklin爱家">
+<meta property="og:description" content="介绍如何利用AI将GitHub开源项目封装成Skill，打造个人超级技能库">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wufulin.github.io/img/default_cover2.jpg">
+<meta property="article:published_time" content="2026-02-04T07:30:00.000Z">
+<meta property="article:modified_time" content="2026-02-04T15:43:12.814Z">
+<meta property="article:author" content="Franklin">
+<meta property="article:tag" content="ai-agent">
+<meta property="article:tag" content="github">
+<meta property="article:tag" content="open-source">
+<meta property="article:tag" content="skills">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wufulin.github.io/img/default_cover2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Skills的最正确用法：将整个Github变成你的超级技能库",
+  "url": "https://wufulin.github.io/2026/02/04/github-skills/",
+  "image": "https://wufulin.github.io/img/default_cover2.jpg",
+  "datePublished": "2026-02-04T07:30:00.000Z",
+  "dateModified": "2026-02-04T15:43:12.814Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Franklin",
+      "url": "https://wufulin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wufulin.github.io/2026/02/04/github-skills/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Skills的最正确用法：将整个Github变成你的超级技能库',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Franklin爱家" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-color: #F4EFEB;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fas fa-clock"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/default_cover2.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Franklin爱家</span></a><a class="nav-page-title" href="/"><span class="site-name">Skills的最正确用法：将整个Github变成你的超级技能库</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fas fa-clock"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Skills的最正确用法：将整个Github变成你的超级技能库</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-02-04T07:30:00.000Z" title="发表于 2026-02-04 15:30:00">2026-02-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T15:43:12.814Z" title="更新于 2026-02-04 23:43:12">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Skills的最正确用法：将整个Github变成你的超级技能库"><a href="#Skills的最正确用法：将整个Github变成你的超级技能库" class="headerlink" title="Skills的最正确用法：将整个Github变成你的超级技能库"></a>Skills的最正确用法：将整个Github变成你的超级技能库</h1><blockquote>
+<p>作者：数字生命卡兹克<br>原文：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/JER462B3dVYlwVYl6rTmzw">https://mp.weixin.qq.com/s/JER462B3dVYlwVYl6rTmzw</a></p>
+</blockquote>
+<hr>
+<h2 id="核心观点"><a href="#核心观点" class="headerlink" title="核心观点"></a>核心观点</h2><p><strong>重复造轮子是低效的</strong>。互联网三十年，开源世界的大神们已经为你铺好了前路。你能想象到的绝大多数需求，都有现成的开源解决方案。</p>
+<p>Skills 的正确用法，是<strong>将 GitHub 上的优质开源项目打包成你自己的技能库</strong>，让 Agent 为你所用。</p>
+<hr>
+<h2 id="为什么用开源项目封装-Skill？"><a href="#为什么用开源项目封装-Skill？" class="headerlink" title="为什么用开源项目封装 Skill？"></a>为什么用开源项目封装 Skill？</h2><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>临时写代码</th>
+<th>开源项目 Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>稳定性</td>
+<td>❌ 未经验证</td>
+<td>✅ 经无数人测试</td>
+</tr>
+<tr>
+<td>成功率</td>
+<td>❌ 容易出错</td>
+<td>✅ 久经考验</td>
+</tr>
+<tr>
+<td>效率</td>
+<td>❌ 从头开发</td>
+<td>✅ 即拿即用</td>
+</tr>
+<tr>
+<td>维护成本</td>
+<td>❌ 自己维护</td>
+<td>✅ 社区维护</td>
+</tr>
+</tbody></table>
+<p><strong>关键洞察</strong>：那些历史悠久的经典开源项目，不管是成功率、稳定性还是效率，都远超绝大多数临时写的代码。</p>
+<hr>
+<h2 id="实战案例"><a href="#实战案例" class="headerlink" title="实战案例"></a>实战案例</h2><h3 id="案例-1：视频下载-Skill"><a href="#案例-1：视频下载-Skill" class="headerlink" title="案例 1：视频下载 Skill"></a>案例 1：视频下载 Skill</h3><p><strong>需求</strong>：下载 YouTube、B站 等视频</p>
+<p><strong>开源项目</strong>：<a target="_blank" rel="noopener" href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a>（GitHub 143k ⭐）</p>
+<p><strong>封装步骤</strong>：</p>
+<ol>
+<li><p><strong>搜索项目</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有没有那种去各种视频网站下载视频的 GitHub 开源项目？</span><br></pre></td></tr></table></figure>
+<p>AI 会推荐 yt-dlp</p>
+</li>
+<li><p><strong>一键封装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">帮我把 https://github.com/yt-dlp/yt-dlp 打包成一个 Skill，</span><br><span class="line">只要给出视频链接，就可以帮我下载视频。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>首次运行优化</strong></p>
+<ul>
+<li>使用 GPT 5.2 Codex 处理首次运行问题</li>
+<li>安装依赖、处理 Cookie 等</li>
+</ul>
+</li>
+<li><p><strong>固化经验</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把这些经验都更新到 video-downloader Skill 里，下次就不用这么慢了。</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>效果</strong>：首次运行几分钟，后续仅需十几秒。</p>
+<hr>
+<h3 id="案例-2：桌面应用打包-Skill"><a href="#案例-2：桌面应用打包-Skill" class="headerlink" title="案例 2：桌面应用打包 Skill"></a>案例 2：桌面应用打包 Skill</h3><p><strong>需求</strong>：将 Web 项目打包成桌面 APP</p>
+<p><strong>开源项目</strong>：<a target="_blank" rel="noopener" href="https://github.com/tw93/Pake">Pake</a>（GitHub 45k ⭐）</p>
+<p><strong>用法</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用 Pake Skill 把我的网页打包成桌面应用</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="案例-3：万能格式转换工厂"><a href="#案例-3：万能格式转换工厂" class="headerlink" title="案例 3：万能格式转换工厂"></a>案例 3：万能格式转换工厂</h3><p><strong>思路</strong>：将多个顶级格式转换项目封装在一起</p>
+<p>可集成的工具：</p>
+<ul>
+<li>FFmpeg（音视频处理）</li>
+<li>ImageMagick（图像处理）</li>
+<li>Pandoc（文档转换）</li>
+</ul>
+<p><strong>效果</strong>：一个 Skill，解决所有格式转换需求。</p>
+<hr>
+<h3 id="案例-4：网页归档-Skill"><a href="#案例-4：网页归档-Skill" class="headerlink" title="案例 4：网页归档 Skill"></a>案例 4：网页归档 Skill</h3><p><strong>开源项目</strong>：<a target="_blank" rel="noopener" href="https://github.com/ArchiveBox/ArchiveBox">ArchiveBox</a></p>
+<p><strong>功能</strong>：想保存的网页，发送给 ArchiveBox Skill，以无数种格式保存。</p>
+<hr>
+<h3 id="案例-5：密码破译-Skill"><a href="#案例-5：密码破译-Skill" class="headerlink" title="案例 5：密码破译 Skill"></a>案例 5：密码破译 Skill</h3><p><strong>开源项目</strong>：<a target="_blank" rel="noopener" href="https://github.com/Ciphey/Ciphey">Ciphey</a></p>
+<p><strong>功能</strong>：配合本地 Agent，直接破译密码。</p>
+<hr>
+<h2 id="Skill-封装全流程"><a href="#Skill-封装全流程" class="headerlink" title="Skill 封装全流程"></a>Skill 封装全流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">需求 → AI搜索GitHub项目 → Skill化封装 → 首次运行 → 迭代优化 → 固化成型</span><br></pre></td></tr></table></figure>
+
+<h3 id="推荐的模型搭配"><a href="#推荐的模型搭配" class="headerlink" title="推荐的模型搭配"></a>推荐的模型搭配</h3><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>推荐模型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>搜索项目</td>
+<td>GPT-5.2 Thinking</td>
+<td>搜索能力强，幻觉低</td>
+</tr>
+<tr>
+<td>构建 Skill</td>
+<td>Claude 4.5 Opus</td>
+<td>Coding 能力强</td>
+</tr>
+<tr>
+<td>首次运行</td>
+<td>GPT 5.2 Codex</td>
+<td>解决运行时问题效率高</td>
+</tr>
+<tr>
+<td>日常使用</td>
+<td>任意</td>
+<td>已稳定运行</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="如何选择要封装的项目？"><a href="#如何选择要封装的项目？" class="headerlink" title="如何选择要封装的项目？"></a>如何选择要封装的项目？</h2><p><strong>三大原则</strong>：</p>
+<ol>
+<li><strong>高 Star 数</strong>：代表社区认可</li>
+<li><strong>持续维护</strong>：最近有更新</li>
+<li><strong>解决具体问题</strong>：功能单一且强大</li>
+</ol>
+<p><strong>推荐项目类型</strong>：</p>
+<ul>
+<li>视频&#x2F;音频处理（yt-dlp, FFmpeg）</li>
+<li>图像处理（ImageMagick）</li>
+<li>文档转换（Pandoc）</li>
+<li>数据抓取（Scrapy）</li>
+<li>自动化工具（Selenium, Playwright）</li>
+</ul>
+<hr>
+<h2 id="背后的哲学"><a href="#背后的哲学" class="headerlink" title="背后的哲学"></a>背后的哲学</h2><blockquote>
+<p>“你要相信，在这个世界上，有无数的大神和前人，已经为你铺好了前路。”</p>
+<p>“你要相信，你的需求，永远不是这个世界上第一个提出的人。”</p>
+<p>“你要相信，人类在这几十年所积攒的历史，几乎覆盖了世界所有的领域。”</p>
+</blockquote>
+<p><strong>开源精神</strong>：每一个愿意开源、无私分享知识的前辈，都让我们能站在他们的肩上，去摘更美的星辰。</p>
+<hr>
+<h2 id="你的弹药库可以有多大？"><a href="#你的弹药库可以有多大？" class="headerlink" title="你的弹药库可以有多大？"></a>你的弹药库可以有多大？</h2><p>GitHub 上 star 数量：</p>
+<ul>
+<li>🔥 yt-dlp：143k</li>
+<li>🔥 FFmpeg： countless projects built on it</li>
+<li>🔥 ImageMagick：行业标准</li>
+<li>🔥 Pandoc：文档转换神器</li>
+<li>🔥 ArchiveBox：网页归档</li>
+<li>🔥 Ciphey：密码破译</li>
+</ul>
+<p>这些只是<strong>冰山一角</strong>。</p>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote>
+<p>“因为 Skills 的诞生，因为 Agent 的强大，现在每个人背后，都是全人类过去数十年的积累。”</p>
+</blockquote>
+<p>你无需三头六臂，无需头上长角，<strong>你的背后就是海量的知识和技能</strong>。</p>
+<p>如果回到 3 年前的你面前，你觉得他跟你如今的能力边界，还有任何可比性吗？</p>
+<p>朋友，这样璀璨、这样伟大、这样能让你成为超人的时代，真的不会让你兴奋吗？</p>
+<hr>
+<h2 id="参考项目"><a href="#参考项目" class="headerlink" title="参考项目"></a>参考项目</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>功能</th>
+<th>Star 数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a></td>
+<td>视频下载</td>
+<td>143k+</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/tw93/Pake">Pake</a></td>
+<td>网页转桌面应用</td>
+<td>45k+</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/ArchiveBox/ArchiveBox">ArchiveBox</a></td>
+<td>网页归档</td>
+<td>20k+</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/Ciphey/Ciphey">Ciphey</a></td>
+<td>自动化解密</td>
+<td>15k+</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>本文整理自数字生命卡兹克的微信公众号文章，仅用于技术学习和分享。</em></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://wufulin.github.io">Franklin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://wufulin.github.io/2026/02/04/github-skills/">https://wufulin.github.io/2026/02/04/github-skills/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://wufulin.github.io" target="_blank">Franklin爱家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/skills/">skills</a><a class="post-meta__tags" href="/tags/github/">github</a><a class="post-meta__tags" href="/tags/open-source/">open-source</a><a class="post-meta__tags" href="/tags/ai-agent/">ai-agent</a></div><div class="post-share"><div class="social-share" data-image="/img/default_cover2.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/02/04/nanoclaw/" title="NanoClaw 代码深度分析"><img class="cover" src="/img/default_cover4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">NanoClaw 代码深度分析</div></div><div class="info-2"><div class="info-item-1">NanoClaw 代码深度分析1. 项目整体架构和概述1.1 项目简介NanoClaw 是一个轻量级、安全的个人 Claude AI 助手，通过 WhatsApp 提供访问接口。它是一个极简主义的替代方案，与 OpenClaw 相比，专注于以下核心特性：  单进程架构：一个 Node.js 进程处理所有功能 容器隔离：AI 代理在 Apple Container（或 Docker）中运行，提供真正的操作系统级隔离 简洁易懂：代码库足够小，可以在短时间内完全理解 AI 原生设计：通过 Claude Code 进行设置和调试，无需复杂的配置界面  1.2 架构概览12345678910111213141516171819202122232425262728293031323334┌─────────────────────────────────────────────────────────────────────┐│                        HOST (macOS/Linux)                            ││           ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Franklin</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/wufulin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Skills%E7%9A%84%E6%9C%80%E6%AD%A3%E7%A1%AE%E7%94%A8%E6%B3%95%EF%BC%9A%E5%B0%86%E6%95%B4%E4%B8%AAGithub%E5%8F%98%E6%88%90%E4%BD%A0%E7%9A%84%E8%B6%85%E7%BA%A7%E6%8A%80%E8%83%BD%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">Skills的最正确用法：将整个Github变成你的超级技能库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A7%82%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">核心观点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%B0%81%E8%A3%85-Skill%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">为什么用开源项目封装 Skill？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">实战案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-1%EF%BC%9A%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD-Skill"><span class="toc-number">1.3.1.</span> <span class="toc-text">案例 1：视频下载 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-2%EF%BC%9A%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8%E6%89%93%E5%8C%85-Skill"><span class="toc-number">1.3.2.</span> <span class="toc-text">案例 2：桌面应用打包 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-3%EF%BC%9A%E4%B8%87%E8%83%BD%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%8E%82"><span class="toc-number">1.3.3.</span> <span class="toc-text">案例 3：万能格式转换工厂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-4%EF%BC%9A%E7%BD%91%E9%A1%B5%E5%BD%92%E6%A1%A3-Skill"><span class="toc-number">1.3.4.</span> <span class="toc-text">案例 4：网页归档 Skill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-5%EF%BC%9A%E5%AF%86%E7%A0%81%E7%A0%B4%E8%AF%91-Skill"><span class="toc-number">1.3.5.</span> <span class="toc-text">案例 5：密码破译 Skill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Skill-%E5%B0%81%E8%A3%85%E5%85%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">Skill 封装全流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%90%AD%E9%85%8D"><span class="toc-number">1.4.1.</span> <span class="toc-text">推荐的模型搭配</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E8%A6%81%E5%B0%81%E8%A3%85%E7%9A%84%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">如何选择要封装的项目？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E5%90%8E%E7%9A%84%E5%93%B2%E5%AD%A6"><span class="toc-number">1.6.</span> <span class="toc-text">背后的哲学</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E7%9A%84%E5%BC%B9%E8%8D%AF%E5%BA%93%E5%8F%AF%E4%BB%A5%E6%9C%89%E5%A4%9A%E5%A4%A7%EF%BC%9F"><span class="toc-number">1.7.</span> <span class="toc-text">你的弹药库可以有多大？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">1.8.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.9.</span> <span class="toc-text">参考项目</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/github-skills/" title="Skills的最正确用法：将整个Github变成你的超级技能库"><img src="/img/default_cover2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Skills的最正确用法：将整个Github变成你的超级技能库"/></a><div class="content"><a class="title" href="/2026/02/04/github-skills/" title="Skills的最正确用法：将整个Github变成你的超级技能库">Skills的最正确用法：将整个Github变成你的超级技能库</a><time datetime="2026-02-04T07:30:00.000Z" title="发表于 2026-02-04 15:30:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/nanoclaw/" title="NanoClaw 代码深度分析"><img src="/img/default_cover4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NanoClaw 代码深度分析"/></a><div class="content"><a class="title" href="/2026/02/04/nanoclaw/" title="NanoClaw 代码深度分析">NanoClaw 代码深度分析</a><time datetime="2026-02-04T02:00:00.000Z" title="发表于 2026-02-04 10:00:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/litellm-go-code-analysis/" title="LiteLLM Go 代码库深度分析报告"><img src="/img/default_cover3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LiteLLM Go 代码库深度分析报告"/></a><div class="content"><a class="title" href="/2026/02/04/litellm-go-code-analysis/" title="LiteLLM Go 代码库深度分析报告">LiteLLM Go 代码库深度分析报告</a><time datetime="2026-02-04T01:30:00.000Z" title="发表于 2026-02-04 09:30:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/03/oh-my-opencode-complete-guide/" title="Oh-My-OpenCode 完全指南：多代理协作编程新范式"><img src="/img/default_cover7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Oh-My-OpenCode 完全指南：多代理协作编程新范式"/></a><div class="content"><a class="title" href="/2026/02/03/oh-my-opencode-complete-guide/" title="Oh-My-OpenCode 完全指南：多代理协作编程新范式">Oh-My-OpenCode 完全指南：多代理协作编程新范式</a><time datetime="2026-02-03T10:00:00.000Z" title="发表于 2026-02-03 18:00:00">2026-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/30/moltbot-memory-mechanism/" title="Moltbot记忆机制深度解析：本地优先的AI长期记忆架构"><img src="/img/default_cover6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Moltbot记忆机制深度解析：本地优先的AI长期记忆架构"/></a><div class="content"><a class="title" href="/2026/01/30/moltbot-memory-mechanism/" title="Moltbot记忆机制深度解析：本地优先的AI长期记忆架构">Moltbot记忆机制深度解析：本地优先的AI长期记忆架构</a><time datetime="2026-01-30T06:00:00.000Z" title="发表于 2026-01-30 14:00:00">2026-01-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/footer_bg.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Franklin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? '' : ''
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: '',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: '',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

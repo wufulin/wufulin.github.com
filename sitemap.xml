@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wufulin.github.io/timeline/index.html</loc>
+    <loc>https://wufulin.github.io/links/index.html</loc>
     
     <lastmod>2026-02-04</lastmod>
     
@@ -20,7 +20,16 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/links/index.html</loc>
+    <loc>https://wufulin.github.io/timeline/index.html</loc>
+    
+    <lastmod>2026-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/2026/01/30/moltbot-memory-mechanism/</loc>
     
     <lastmod>2026-02-04</lastmod>
     
@@ -83,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/2026/02/04/litellm-go-code-analysis/</loc>
+    <loc>https://wufulin.github.io/2026/02/04/github-skills/</loc>
     
     <lastmod>2026-02-04</lastmod>
     
@@ -92,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://wufulin.github.io/2026/01/30/moltbot-memory-mechanism/</loc>
+    <loc>https://wufulin.github.io/2026/02/04/litellm-go-code-analysis/</loc>
     
     <lastmod>2026-02-04</lastmod>
     
@@ -132,6 +141,34 @@
   
   <url>
     <loc>https://wufulin.github.io/tags/%E6%95%88%E7%8E%87%E6%8F%90%E5%8D%87/</loc>
+    <lastmod>2026-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/tags/skills/</loc>
+    <lastmod>2026-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/tags/github/</loc>
+    <lastmod>2026-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/tags/open-source/</loc>
+    <lastmod>2026-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wufulin.github.io/tags/ai-agent/</loc>
     <lastmod>2026-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
