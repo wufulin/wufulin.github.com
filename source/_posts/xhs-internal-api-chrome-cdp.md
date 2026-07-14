@@ -403,8 +403,6 @@ x-xray-traceid
 
 这样既绕过了脆弱的搜索 DOM，也不需要把签名算法搬出浏览器。对于带动态签名的网页内部 API，这通常比自己复刻请求头更稳定。
 
-本文写作结构参考了：[《我做了一个 BOSS直聘抓取工具，开源了》](https://blog.xiaohuangyu.space/p/boss-zhipin-scraper-open-source/)。
-
 相关资料：
 
 - [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
