@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战 | Franklin爱家</title><meta name="author" content="Franklin"><meta name="copyright" content="Franklin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="起因最近在给一个多站点 MCP 工具补小红书笔记搜索。 最初的实现很直观：打开搜索页，等待页面渲染，再从 window.__INITIAL_STATE__ 里读取 search.feeds。这种方案能用，而且比解析卡片 DOM 稳定一些，但它仍然依赖前端页面：  搜索页必须完整加载； 筛选条件要靠点击页面控件； 首屏、翻页和异常状态分散在不同前端状态里； 页面结构一改，选择器和状态读取逻辑就可能失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战">
+<meta property="og:url" content="https://wufulin.github.io/2026/07/14/xhs-internal-api-chrome-cdp/index.html">
+<meta property="og:site_name" content="Franklin爱家">
+<meta property="og:description" content="起因最近在给一个多站点 MCP 工具补小红书笔记搜索。 最初的实现很直观：打开搜索页，等待页面渲染，再从 window.__INITIAL_STATE__ 里读取 search.feeds。这种方案能用，而且比解析卡片 DOM 稳定一些，但它仍然依赖前端页面：  搜索页必须完整加载； 筛选条件要靠点击页面控件； 首屏、翻页和异常状态分散在不同前端状态里； 页面结构一改，选择器和状态读取逻辑就可能失">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wufulin.github.io/img/default_cover4.jpg">
+<meta property="article:published_time" content="2026-07-14T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-14T15:28:14.154Z">
+<meta property="article:author" content="Franklin">
+<meta property="article:tag" content="Chrome CDP">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="小红书">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wufulin.github.io/img/default_cover4.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战",
+  "url": "https://wufulin.github.io/2026/07/14/xhs-internal-api-chrome-cdp/",
+  "image": "https://wufulin.github.io/img/default_cover4.jpg",
+  "datePublished": "2026-07-14T10:00:00.000Z",
+  "dateModified": "2026-07-14T15:28:14.154Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Franklin",
+      "url": "https://wufulin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://wufulin.github.io/2026/07/14/xhs-internal-api-chrome-cdp/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="Franklin爱家" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-color: #F4EFEB;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fas fa-clock"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/default_cover4.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Franklin爱家</span></a><a class="nav-page-title" href="/"><span class="site-name">绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/timeline/"><i class="fa-fw fas fa-clock"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-14T10:00:00.000Z" title="发表于 2026-07-14 18:00:00">2026-07-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-14T15:28:14.154Z" title="更新于 2026-07-14 23:28:14">2026-07-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E5%AE%9E%E8%B7%B5/">技术实践</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>最近在给一个多站点 MCP 工具补小红书笔记搜索。</p>
+<p>最初的实现很直观：打开搜索页，等待页面渲染，再从 <code>window.__INITIAL_STATE__</code> 里读取 <code>search.feeds</code>。这种方案能用，而且比解析卡片 DOM 稳定一些，但它仍然依赖前端页面：</p>
+<ul>
+<li>搜索页必须完整加载；</li>
+<li>筛选条件要靠点击页面控件；</li>
+<li>首屏、翻页和异常状态分散在不同前端状态里；</li>
+<li>页面结构一改，选择器和状态读取逻辑就可能失效。</li>
+</ul>
+<p>既然网页自己也要请求结构化数据，能不能保留真实 Chrome 的登录环境，但跳过搜索框、筛选面板和结果卡片，直接调用内部 API？</p>
+<p>答案是可以。</p>
+<p>本文记录的是 2026 年 7 月实际验证过的一条路径：<strong>Chrome CDP + 小红书页面上下文 + 前端自身的请求函数</strong>。</p>
+<h2 id="核心接口"><a href="#核心接口" class="headerlink" title="核心接口"></a>核心接口</h2><p>当前网页搜索使用的笔记接口是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST https://so.xiaohongshu.com/api/sns/web/v2/search/notes</span><br></pre></td></tr></table></figure>
+
+<p>一次普通搜索的请求体大致如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="string">&quot;露营&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;page_size&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;search_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;search-mrksdol4&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;sort&quot;</span><span class="punctuation">:</span> <span class="string">&quot;general&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;note_type&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;ext_flags&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;geo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;image_formats&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;jpg&quot;</span><span class="punctuation">,</span> <span class="string">&quot;webp&quot;</span><span class="punctuation">,</span> <span class="string">&quot;avif&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>返回值已经是可直接消费的结构化对象：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">response</span><br><span class="line">├── hasMore</span><br><span class="line">├── requestDqaInstant</span><br><span class="line">└── items[]</span><br><span class="line">    ├── id</span><br><span class="line">    ├── modelType</span><br><span class="line">    ├── xsecToken</span><br><span class="line">    └── noteCard</span><br><span class="line">        ├── displayTitle</span><br><span class="line">        ├── type</span><br><span class="line">        ├── user</span><br><span class="line">        ├── interactInfo</span><br><span class="line">        ├── cover</span><br><span class="line">        └── imageList</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>id</code> 和 <code>xsecToken</code> 很重要。后续打开笔记详情时，需要把它们一起带上：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.xiaohongshu.com/explore/&lt;note_id&gt;?xsec_token=&lt;token&gt;&amp;xsec_source=pc_feed</span><br></pre></td></tr></table></figure>
+
+<p>看起来只要在页面里 <code>fetch()</code> 一下就结束了，但真正麻烦的是请求签名。</p>
+<h2 id="为什么不能直接-fetch"><a href="#为什么不能直接-fetch" class="headerlink" title="为什么不能直接 fetch"></a>为什么不能直接 fetch</h2><p>小红书网页请求会带一组动态请求头：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">X-s</span><br><span class="line">X-t</span><br><span class="line">X-S-Common</span><br><span class="line">X-B3-TraceId</span><br><span class="line">X-Xray-TraceId</span><br><span class="line">X-Rap-Param</span><br></pre></td></tr></table></figure>
+
+<p>页面上确实暴露了 <code>window._webmsxyw</code>，调用它可以生成 <code>X-s</code> 和 <code>X-t</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> signed = <span class="variable language_">window</span>.<span class="title function_">_webmsxyw</span>(</span><br><span class="line">  <span class="string">&quot;/api/sns/web/v2/search/notes&quot;</span>,</span><br><span class="line">  payload</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>但这还不够。</p>
+<p>我做了两次验证：</p>
+<ol>
+<li>只使用 <code>_webmsxyw</code> 返回的 <code>X-s</code> &#x2F; <code>X-t</code>，接口能收到请求，但业务层拒绝；</li>
+<li>从上一条正常请求里复制 <code>X-S-Common</code> 再重放，新请求仍然失败。</li>
+</ol>
+<p>这说明 <code>X-S-Common</code> 不是一个可以长期缓存的会话常量，它和当前请求环境、签名或时间有关。继续把签名算法搬到 Node.js，不但维护成本高，也很容易随着前端升级失效。</p>
+<p>更稳妥的办法是：<strong>不要自己生成完整签名，让小红书已经加载的前端请求模块替我们生成。</strong></p>
+<h2 id="技术方案：Chrome-CDP-只负责提供执行环境"><a href="#技术方案：Chrome-CDP-只负责提供执行环境" class="headerlink" title="技术方案：Chrome CDP 只负责提供执行环境"></a>技术方案：Chrome CDP 只负责提供执行环境</h2><p>整体链路如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">  A[&quot;MCP: xhs_search_notes&quot;] --&gt; B[&quot;Chrome CDP 9224&quot;]</span><br><span class="line">  B --&gt; C[&quot;已登录的小红书页面&quot;]</span><br><span class="line">  C --&gt; D[&quot;动态定位 Webpack 搜索请求函数&quot;]</span><br><span class="line">  D --&gt; E[&quot;前端模块生成完整签名&quot;]</span><br><span class="line">  E --&gt; F[&quot;POST /api/sns/web/v2/search/notes&quot;]</span><br><span class="line">  F --&gt; G[&quot;规范化 items 为笔记结果&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>这里的 Chrome 不是用来点击页面，而是提供三样东西：</p>
+<ol>
+<li>独立且持久的登录态；</li>
+<li>完整的浏览器指纹和页面运行环境；</li>
+<li>小红书已经初始化好的请求、签名和拦截器模块。</li>
+</ol>
+<p>搜索数据直接来自 API 响应，不读取结果卡片 DOM，也不需要模拟输入和点击。</p>
+<h2 id="使用隔离的-Chrome-profile"><a href="#使用隔离的-Chrome-profile" class="headerlink" title="使用隔离的 Chrome profile"></a>使用隔离的 Chrome profile</h2><p>不要把日常使用的主 Chrome profile 交给自动化程序。建议为小红书单独创建一个 profile，并且只监听本机地址：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \</span><br><span class="line">  --remote-debugging-address=127.0.0.1 \</span><br><span class="line">  --remote-debugging-port=9224 \</span><br><span class="line">  --user-data-dir=<span class="string">&quot;<span class="variable">$HOME</span>/.xhs-cdp-profile&quot;</span> \</span><br><span class="line">  --profile-directory=Default \</span><br><span class="line">  https://www.xiaohongshu.com</span><br></pre></td></tr></table></figure>
+
+<p>第一次启动后，在这个专用窗口里手动登录。之后登录态保存在 <code>~/.xhs-cdp-profile</code>，服务重启时可以继续复用。</p>
+<p>不需要读取 Cookie，不需要把 Cookie 复制到配置文件，也不要把 CDP 端口暴露到公网。</p>
+<h2 id="动态找到小红书自己的搜索函数"><a href="#动态找到小红书自己的搜索函数" class="headerlink" title="动态找到小红书自己的搜索函数"></a>动态找到小红书自己的搜索函数</h2><p>网页使用 Webpack 打包。模块编号和导出名经过压缩，例如某次构建里可能是数字模块号和单字母导出，但这些值下次发布就可能改变，所以不能硬编码。</p>
+<p>可用的稳定线索有两个：</p>
+<ul>
+<li>API 常量名：<code>WEB_AI_SEARCH_NOTES_V2</code>；</li>
+<li>接口路径：<code>/api/sns/web/v2/search/notes</code>。</li>
+</ul>
+<p>下面这段代码在页面上下文中完成动态定位和调用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">searchXhsNotes</span>(<span class="params">page, payload</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">await</span> page.<span class="title function_">evaluate</span>(<span class="title function_">async</span> (requestBody) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> webpackRequire</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">webpackChunkxhs_pc_web</span>.<span class="title function_">push</span>([</span><br><span class="line">      [<span class="string">`xhs-api-<span class="subst">$&#123;<span class="built_in">Date</span>.now()&#125;</span>`</span>],</span><br><span class="line">      &#123;&#125;,</span><br><span class="line">      <span class="function">(<span class="params">nextRequire</span>) =&gt;</span> &#123;</span><br><span class="line">        webpackRequire = nextRequire</span><br><span class="line">      &#125;</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!webpackRequire?.<span class="property">m</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;XHS Webpack runtime is unavailable&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 先找定义接口常量的配置模块。</span></span><br><span class="line">    <span class="keyword">const</span> configEntry = <span class="title class_">Object</span>.<span class="title function_">entries</span>(webpackRequire.<span class="property">m</span>).<span class="title function_">find</span>(<span class="function">(<span class="params">[, factory]</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> source = <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(factory)</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        source.<span class="title function_">includes</span>(<span class="string">&quot;WEB_AI_SEARCH_NOTES_V2&quot;</span>) &amp;&amp;</span><br><span class="line">        source.<span class="title function_">includes</span>(<span class="string">&quot;/api/sns/web/v2/search/notes&quot;</span>)</span><br><span class="line">      )</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!configEntry) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;XHS search API config module was not found&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> [configId] = configEntry</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 再找引用该配置模块和接口常量的请求包装模块。</span></span><br><span class="line">    <span class="keyword">const</span> wrapperEntry = <span class="title class_">Object</span>.<span class="title function_">entries</span>(webpackRequire.<span class="property">m</span>).<span class="title function_">find</span>(</span><br><span class="line">      <span class="function">(<span class="params">[moduleId, factory]</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (moduleId === configId) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        <span class="keyword">const</span> source = <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(factory)</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">          source.<span class="title function_">includes</span>(configId) &amp;&amp;</span><br><span class="line">          source.<span class="title function_">includes</span>(<span class="string">&quot;WEB_AI_SEARCH_NOTES_V2&quot;</span>)</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!wrapperEntry) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;XHS search API wrapper module was not found&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">exports</span> = <span class="title function_">webpackRequire</span>(wrapperEntry[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">const</span> searchNotes = <span class="title class_">Object</span>.<span class="title function_">values</span>(<span class="built_in">exports</span>).<span class="title function_">find</span>(</span><br><span class="line">      <span class="function">(<span class="params">value</span>) =&gt;</span></span><br><span class="line">        <span class="keyword">typeof</span> value === <span class="string">&quot;function&quot;</span> &amp;&amp;</span><br><span class="line">        <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span></span><br><span class="line">          .<span class="title function_">call</span>(value)</span><br><span class="line">          .<span class="title function_">includes</span>(<span class="string">&quot;WEB_AI_SEARCH_NOTES_V2&quot;</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!searchNotes) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;XHS search API function was not found&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 由小红书自己的请求模块处理 X-s、X-t、X-S-Common 等头。</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> <span class="title function_">searchNotes</span>(requestBody)</span><br><span class="line">  &#125;, payload)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">searchXhsNotes</span>(page, &#123;</span><br><span class="line">  <span class="attr">keyword</span>: <span class="string">&quot;露营&quot;</span>,</span><br><span class="line">  <span class="attr">page</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">page_size</span>: <span class="number">20</span>,</span><br><span class="line">  <span class="attr">search_id</span>: <span class="string">`search-<span class="subst">$&#123;<span class="built_in">Date</span>.now().toString(<span class="number">36</span>)&#125;</span>`</span>,</span><br><span class="line">  <span class="attr">sort</span>: <span class="string">&quot;general&quot;</span>,</span><br><span class="line">  <span class="attr">note_type</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">ext_flags</span>: [],</span><br><span class="line">  <span class="attr">geo</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">image_formats</span>: [<span class="string">&quot;jpg&quot;</span>, <span class="string">&quot;webp&quot;</span>, <span class="string">&quot;avif&quot;</span>]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这段实现依赖小红书当前网页模块的语义线索，而不是某一个固定模块号。前端重新构建后，只要接口常量和请求包装关系没有同时改变，仍然能找到正确函数。</p>
+<h2 id="规范化搜索结果"><a href="#规范化搜索结果" class="headerlink" title="规范化搜索结果"></a>规范化搜索结果</h2><p>API 返回的是网页前端模型，字段采用 camelCase。为了让 MCP 输出稳定，最好在浏览器之外做一次白名单映射：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">normalizeSearchItems</span>(<span class="params">items, webBaseUrl</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> items</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> item?.<span class="property">id</span> &amp;&amp; item?.<span class="property">xsecToken</span> &amp;&amp; item?.<span class="property">noteCard</span>)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> card = item.<span class="property">noteCard</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">result_id</span>: item.<span class="property">id</span>,</span><br><span class="line">        <span class="attr">note_id</span>: item.<span class="property">id</span>,</span><br><span class="line">        <span class="attr">xsec_token</span>: item.<span class="property">xsecToken</span>,</span><br><span class="line">        <span class="attr">detail_url</span>:</span><br><span class="line">          <span class="string">`<span class="subst">$&#123;webBaseUrl&#125;</span>/explore/<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(item.id)&#125;</span>`</span> +</span><br><span class="line">          <span class="string">`?xsec_token=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(item.xsecToken)&#125;</span>`</span> +</span><br><span class="line">          <span class="string">`&amp;xsec_source=pc_feed`</span>,</span><br><span class="line">        <span class="attr">type</span>: card.<span class="property">type</span>,</span><br><span class="line">        <span class="attr">title</span>: card.<span class="property">displayTitle</span>,</span><br><span class="line">        <span class="attr">user</span>: &#123;</span><br><span class="line">          <span class="attr">user_id</span>: card.<span class="property">user</span>?.<span class="property">userId</span>,</span><br><span class="line">          <span class="attr">nickname</span>: card.<span class="property">user</span>?.<span class="property">nickname</span> ?? card.<span class="property">user</span>?.<span class="property">nickName</span>,</span><br><span class="line">          <span class="attr">avatar</span>: card.<span class="property">user</span>?.<span class="property">avatar</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">interact_info</span>: &#123;</span><br><span class="line">          <span class="attr">liked</span>: card.<span class="property">interactInfo</span>?.<span class="property">liked</span>,</span><br><span class="line">          <span class="attr">liked_count</span>: card.<span class="property">interactInfo</span>?.<span class="property">likedCount</span>,</span><br><span class="line">          <span class="attr">collected</span>: card.<span class="property">interactInfo</span>?.<span class="property">collected</span>,</span><br><span class="line">          <span class="attr">collected_count</span>: card.<span class="property">interactInfo</span>?.<span class="property">collectedCount</span>,</span><br><span class="line">          <span class="attr">comment_count</span>: card.<span class="property">interactInfo</span>?.<span class="property">commentCount</span>,</span><br><span class="line">          <span class="attr">shared_count</span>: card.<span class="property">interactInfo</span>?.<span class="property">sharedCount</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">cover</span>: &#123;</span><br><span class="line">          <span class="attr">width</span>: card.<span class="property">cover</span>?.<span class="property">width</span>,</span><br><span class="line">          <span class="attr">height</span>: card.<span class="property">cover</span>?.<span class="property">height</span>,</span><br><span class="line">          <span class="attr">url_default</span>: card.<span class="property">cover</span>?.<span class="property">urlDefault</span>,</span><br><span class="line">          <span class="attr">url_pre</span>: card.<span class="property">cover</span>?.<span class="property">urlPre</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不要把整个响应对象原样返回。白名单映射可以减少接口字段变化带来的影响，也避免无意间暴露调试字段或会话相关信息。</p>
+<h2 id="分页与筛选"><a href="#分页与筛选" class="headerlink" title="分页与筛选"></a>分页与筛选</h2><p>分页时应在同一次搜索中复用 <code>search_id</code>，只增加 <code>page</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> searchId = <span class="string">`search-<span class="subst">$&#123;<span class="built_in">Date</span>.now().toString(<span class="number">36</span>)&#125;</span>`</span></span><br><span class="line"><span class="keyword">const</span> allItems = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> pageNumber = <span class="number">1</span>; pageNumber &lt;= <span class="number">3</span>; pageNumber += <span class="number">1</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">searchXhsNotes</span>(page, &#123;</span><br><span class="line">    <span class="attr">keyword</span>: <span class="string">&quot;露营&quot;</span>,</span><br><span class="line">    <span class="attr">page</span>: pageNumber,</span><br><span class="line">    <span class="attr">page_size</span>: <span class="number">20</span>,</span><br><span class="line">    <span class="attr">search_id</span>: searchId,</span><br><span class="line">    <span class="attr">sort</span>: <span class="string">&quot;general&quot;</span>,</span><br><span class="line">    <span class="attr">note_type</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">ext_flags</span>: [],</span><br><span class="line">    <span class="attr">geo</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    <span class="attr">image_formats</span>: [<span class="string">&quot;jpg&quot;</span>, <span class="string">&quot;webp&quot;</span>, <span class="string">&quot;avif&quot;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  allItems.<span class="title function_">push</span>(...(response.<span class="property">items</span> ?? []))</span><br><span class="line">  <span class="keyword">if</span> (!response.<span class="property">hasMore</span>) <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 低频、有界，不做并发轰炸。</span></span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">1500</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>page_size</code> 不等于最终笔记数量。实测响应里可能混有不同 <code>modelType</code> 的项目，所以最终数量应以规范化后的有效笔记为准，而不是简单相信数组长度。</p>
+<p>筛选条件也应该继续使用网页实际使用的参数和值，不要凭空猜测枚举。当前默认请求里可以确认的字段包括 <code>sort</code>、<code>note_type</code>、<code>ext_flags</code> 和 <code>geo</code>。</p>
+<h2 id="实际验证"><a href="#实际验证" class="headerlink" title="实际验证"></a>实际验证</h2><p>在已登录的专用 Chrome profile 中，我做了一次不操作 DOM 的真实调用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">登录状态：有效</span><br><span class="line">请求方法：POST</span><br><span class="line">请求地址：https://so.xiaohongshu.com/api/sns/web/v2/search/notes</span><br><span class="line">关键词：露营</span><br><span class="line">返回 items：26</span><br></pre></td></tr></table></figure>
+
+<p>CDP 捕获到的请求头名称包括：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x-b3-traceid</span><br><span class="line">x-rap-param</span><br><span class="line">x-s</span><br><span class="line">x-s-common</span><br><span class="line">x-t</span><br><span class="line">x-xray-traceid</span><br></pre></td></tr></table></figure>
+
+<p>这些头全部由小红书自身的前端请求模块生成，程序没有读取或输出任何签名值。</p>
+<h2 id="几个容易踩的坑"><a href="#几个容易踩的坑" class="headerlink" title="几个容易踩的坑"></a>几个容易踩的坑</h2><h3 id="1-登录检测不能只看页面能不能搜索"><a href="#1-登录检测不能只看页面能不能搜索" class="headerlink" title="1. 登录检测不能只看页面能不能搜索"></a>1. 登录检测不能只看页面能不能搜索</h3><p>未登录时搜索页也可能渲染输入框和部分内容。如果只检查“页面里有没有搜索容器”，很容易把游客状态误判为已登录。</p>
+<p>更可靠的做法是组合判断：</p>
+<ul>
+<li>是否存在用户头像或个人主页节点；</li>
+<li>是否出现登录容器或二维码；</li>
+<li>页面文字是否出现“请登录”“登录后查看”等提示。</li>
+</ul>
+<p>我在未登录状态下调用接口时收到过 <code>-104</code> 权限错误；完成专用 profile 登录后，同一条页面内请求立即返回正常 <code>items</code>。</p>
+<h3 id="2-不要硬编码-Webpack-模块号"><a href="#2-不要硬编码-Webpack-模块号" class="headerlink" title="2. 不要硬编码 Webpack 模块号"></a>2. 不要硬编码 Webpack 模块号</h3><p>模块号和导出名都是构建产物，随时可能改变。应通过接口常量、路径和引用关系动态定位，并在找不到时返回清晰错误。</p>
+<h3 id="3-页面导航后要重新发现函数"><a href="#3-页面导航后要重新发现函数" class="headerlink" title="3. 页面导航后要重新发现函数"></a>3. 页面导航后要重新发现函数</h3><p>页面刷新或跳转可能替换 Webpack runtime。不要跨页面长期保存函数句柄；每个新页面会话重新定位，或设置短生命周期缓存。</p>
+<h3 id="4-只返回可序列化快照"><a href="#4-只返回可序列化快照" class="headerlink" title="4. 只返回可序列化快照"></a>4. 只返回可序列化快照</h3><p>不要把 Axios 实例、Vue ref、函数或循环引用带出页面。搜索函数完成后，应立即转换成普通对象，再交给 Node.js&#x2F;MCP 层。</p>
+<h3 id="5-API-不是官方公开契约"><a href="#5-API-不是官方公开契约" class="headerlink" title="5. API 不是官方公开契约"></a>5. API 不是官方公开契约</h3><p>接口路径、参数和前端模块都可能变化。生产实现需要超时、结果上限、错误映射和可观察日志，并保留受控 fallback。</p>
+<h2 id="数据安全和使用边界"><a href="#数据安全和使用边界" class="headerlink" title="数据安全和使用边界"></a>数据安全和使用边界</h2><p>这套方案的目标是复用本人正常登录的浏览器会话，做低频、只读的数据整理。建议至少遵守以下边界：</p>
+<ul>
+<li>使用独立 Chrome profile，不连接日常主浏览器；</li>
+<li>CDP 只监听 <code>127.0.0.1</code>；</li>
+<li>不导出 Cookie、签名值或浏览器存储；</li>
+<li>不绕过验证码、登录限制或账号风控；</li>
+<li>不做高并发、无限翻页或批量账号抓取；</li>
+<li>尊重平台规则、内容版权和个人隐私。</li>
+</ul>
+<p>如果接口返回登录、验证或账号异常，应停止自动化并由用户在专用 Chrome 窗口里处理，而不是继续尝试绕过。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次最有价值的结论不是“找到了一个接口”，而是确定了一种维护成本更低的调用方式：</p>
+<blockquote>
+<p>Chrome CDP 保留真实登录环境，小红书前端模块负责完整签名，业务代码只负责构造参数和规范化响应。</p>
+</blockquote>
+<p>这样既绕过了脆弱的搜索 DOM，也不需要把签名算法搬出浏览器。对于带动态签名的网页内部 API，这通常比自己复刻请求头更稳定。</p>
+<p>本文写作结构参考了：<a target="_blank" rel="noopener" href="https://blog.xiaohuangyu.space/p/boss-zhipin-scraper-open-source/">《我做了一个 BOSS直聘抓取工具，开源了》</a>。</p>
+<p>相关资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://chromedevtools.github.io/devtools-protocol/">Chrome DevTools Protocol</a></li>
+<li><a target="_blank" rel="noopener" href="https://playwright.dev/docs/api/class-browsertype#browser-type-connect-over-cdp">Playwright <code>connectOverCDP</code></a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://wufulin.github.io">Franklin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://wufulin.github.io/2026/07/14/xhs-internal-api-chrome-cdp/">https://wufulin.github.io/2026/07/14/xhs-internal-api-chrome-cdp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://wufulin.github.io" target="_blank">Franklin爱家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B0%8F%E7%BA%A2%E4%B9%A6/">小红书</a><a class="post-meta__tags" href="/tags/Chrome-CDP/">Chrome CDP</a><a class="post-meta__tags" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a><a class="post-meta__tags" href="/tags/MCP/">MCP</a><a class="post-meta__tags" href="/tags/TypeScript/">TypeScript</a></div><div class="post-share"><div class="social-share" data-image="/img/default_cover4.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/02/24/30/" title="海来阿木：离异又丧女，30岁终于登上春晚"><img class="cover" src="/img/default_cover6.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">海来阿木：离异又丧女，30岁终于登上春晚</div></div><div class="info-2"><div class="info-item-1">海来阿木：离异又丧女，30岁终于登上春晚，演出结束给女儿扫墓 - 今日头条 作者: 娱八瓜发布时间: 发布原文链接: https://www.toutiao.com/article/7602941945677234722/?app=news_article&amp;category_new=__all__    编辑|八瓜鱼 千磨万击还坚劲，任尔东西南北风。 当命运变成无情刽子手，当生活变成开不出花的废墟。 海来阿木，一个经历过命运三重打击的男人。 用旋律，谱写出最响亮的反击乐章。  海来阿木的前半生，像是被命运按下了 “苦难加速键”。 每一步都走得格外艰难。 初中没读完，他就被迫辍学，扛起家庭重担。 16岁本是懵懂叛逆的年纪。 他却只能跟着别人跑长途货车。 方向盘握在手里，前路却一片迷茫。 可他心里的音乐梦，从来没熄灭过。  2011年，18岁的海来阿木揣着微薄积蓄。 瞒着父母，独自奔赴成都，追寻音乐梦想。 初到成都，他举目无亲，连落脚的地方都没有。 为了活下去，他在小吃店打杂，洗碗端盘子。 住最便宜的地下室，阴暗潮湿。 却始终没放弃练歌。  后来，他鼓起勇气，去酒吧应聘驻唱歌...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Franklin</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/wufulin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">核心接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%9B%B4%E6%8E%A5-fetch"><span class="toc-number">3.</span> <span class="toc-text">为什么不能直接 fetch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%EF%BC%9AChrome-CDP-%E5%8F%AA%E8%B4%9F%E8%B4%A3%E6%8F%90%E4%BE%9B%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-number">4.</span> <span class="toc-text">技术方案：Chrome CDP 只负责提供执行环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9A%94%E7%A6%BB%E7%9A%84-Chrome-profile"><span class="toc-number">5.</span> <span class="toc-text">使用隔离的 Chrome profile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%89%BE%E5%88%B0%E5%B0%8F%E7%BA%A2%E4%B9%A6%E8%87%AA%E5%B7%B1%E7%9A%84%E6%90%9C%E7%B4%A2%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">动态找到小红书自己的搜索函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%84%E8%8C%83%E5%8C%96%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C"><span class="toc-number">7.</span> <span class="toc-text">规范化搜索结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E9%A1%B5%E4%B8%8E%E7%AD%9B%E9%80%89"><span class="toc-number">8.</span> <span class="toc-text">分页与筛选</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E9%AA%8C%E8%AF%81"><span class="toc-number">9.</span> <span class="toc-text">实际验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E5%AE%B9%E6%98%93%E8%B8%A9%E7%9A%84%E5%9D%91"><span class="toc-number">10.</span> <span class="toc-text">几个容易踩的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%99%BB%E5%BD%95%E6%A3%80%E6%B5%8B%E4%B8%8D%E8%83%BD%E5%8F%AA%E7%9C%8B%E9%A1%B5%E9%9D%A2%E8%83%BD%E4%B8%8D%E8%83%BD%E6%90%9C%E7%B4%A2"><span class="toc-number">10.1.</span> <span class="toc-text">1. 登录检测不能只看页面能不能搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%8D%E8%A6%81%E7%A1%AC%E7%BC%96%E7%A0%81-Webpack-%E6%A8%A1%E5%9D%97%E5%8F%B7"><span class="toc-number">10.2.</span> <span class="toc-text">2. 不要硬编码 Webpack 模块号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%A1%B5%E9%9D%A2%E5%AF%BC%E8%88%AA%E5%90%8E%E8%A6%81%E9%87%8D%E6%96%B0%E5%8F%91%E7%8E%B0%E5%87%BD%E6%95%B0"><span class="toc-number">10.3.</span> <span class="toc-text">3. 页面导航后要重新发现函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%8F%AA%E8%BF%94%E5%9B%9E%E5%8F%AF%E5%BA%8F%E5%88%97%E5%8C%96%E5%BF%AB%E7%85%A7"><span class="toc-number">10.4.</span> <span class="toc-text">4. 只返回可序列化快照</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-API-%E4%B8%8D%E6%98%AF%E5%AE%98%E6%96%B9%E5%85%AC%E5%BC%80%E5%A5%91%E7%BA%A6"><span class="toc-number">10.5.</span> <span class="toc-text">5. API 不是官方公开契约</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E5%92%8C%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C"><span class="toc-number">11.</span> <span class="toc-text">数据安全和使用边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">12.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/14/xhs-internal-api-chrome-cdp/" title="绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战"><img src="/img/default_cover4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战"/></a><div class="content"><a class="title" href="/2026/07/14/xhs-internal-api-chrome-cdp/" title="绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战">绕过搜索 DOM，直接调用小红书内部 API：Chrome CDP 实战</a><time datetime="2026-07-14T10:00:00.000Z" title="发表于 2026-07-14 18:00:00">2026-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/24/30/" title="海来阿木：离异又丧女，30岁终于登上春晚"><img src="/img/default_cover6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="海来阿木：离异又丧女，30岁终于登上春晚"/></a><div class="content"><a class="title" href="/2026/02/24/30/" title="海来阿木：离异又丧女，30岁终于登上春晚">海来阿木：离异又丧女，30岁终于登上春晚</a><time datetime="2026-02-24T05:27:39.000Z" title="发表于 2026-02-24 13:27:39">2026-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/06/ai-agent/" title="AI Agent 记忆系统深度解析"><img src="/img/default_cover8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AI Agent 记忆系统深度解析"/></a><div class="content"><a class="title" href="/2026/02/06/ai-agent/" title="AI Agent 记忆系统深度解析">AI Agent 记忆系统深度解析</a><time datetime="2026-02-06T07:46:55.000Z" title="发表于 2026-02-06 15:46:55">2026-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/github-skills/" title="Skills的最正确用法：将整个Github变成你的超级技能库"><img src="/img/default_cover5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Skills的最正确用法：将整个Github变成你的超级技能库"/></a><div class="content"><a class="title" href="/2026/02/04/github-skills/" title="Skills的最正确用法：将整个Github变成你的超级技能库">Skills的最正确用法：将整个Github变成你的超级技能库</a><time datetime="2026-02-04T07:30:00.000Z" title="发表于 2026-02-04 15:30:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/nanoclaw/" title="NanoClaw 代码深度分析"><img src="/img/default_cover2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NanoClaw 代码深度分析"/></a><div class="content"><a class="title" href="/2026/02/04/nanoclaw/" title="NanoClaw 代码深度分析">NanoClaw 代码深度分析</a><time datetime="2026-02-04T02:00:00.000Z" title="发表于 2026-02-04 10:00:00">2026-02-04</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/footer_bg.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Franklin</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? '' : ''
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: '',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: '',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    GLOBAL_CONFIG_SITE.pageType === 'post' && getCount()
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
